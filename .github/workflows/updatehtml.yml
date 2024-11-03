@@ -1,0 +1,33 @@
+name: Atualizar Ícones no index.html
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-icons:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v2
+
+      - name: Configurar Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Executar o script para atualizar index.html
+        run: python update_icons.py
+
+      - name: Commit e push das alterações
+        run: |
+          git pull
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "<>"
+          git add index.html
+          git commit -m "Atualiza index.html com os novos ícones"
+          git push
