@@ -1,6 +1,9 @@
 name: Atualizar Ícones no index.html
 
 on:
+  push:
+    branches:
+      - main  # Executa apenas quando houver um push na branch main
   workflow_dispatch:
 
 jobs:
@@ -25,9 +28,9 @@ jobs:
 
       - name: Commit e push das alterações
         run: |
-          git pull
           git config --local user.name "github-actions[bot]"
           git config --local user.email "<>"
+          git pull
           git add index.html
           git commit -m "Atualiza index.html com os novos ícones"
           git push
