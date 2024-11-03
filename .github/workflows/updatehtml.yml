@@ -24,7 +24,7 @@ jobs:
           python -m pip install --upgrade pip
 
       - name: Executar o script para atualizar index.html
-        run: python update_icons.py
+        run: python updatehtml.py
 
       - name: Commit e push das alterações
         run: |
