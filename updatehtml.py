@@ -3,7 +3,7 @@ import os
 def generate_icon_html(icon_name):
     return f'''
         <div class="icon-item">
-            <img src="{icon_name}" alt="{icon_name}">
+            <img src="{icon_name}" alt="{icon_name}" title="{icon_name}">
             <div class="icon-name">{icon_name}</div>
         </div>
     '''
