@@ -1,4 +1,5 @@
 import os
+import re
 
 def generate_icon_html(icon_name):
     return f'''
@@ -22,10 +23,12 @@ def update_index_html():
     with open(index_file, 'r', encoding='utf-8') as f:
         html_content = f.read()
 
-    # Substitui o conteúdo da div pelo novo HTML gerado
-    new_content = html_content.replace(
-        '<div class="icon-grid" id="icon-grid">', 
-        f'<div class="icon-grid" id="icon-grid">\n{icons_html}'
+    # Substitui toda a div pelo novo conteúdo, usando expressão regular
+    new_content = re.sub(
+        r'<div class="icon-grid" id="icon-grid">.*?</div>',
+        f'<div class="icon-grid" id="icon-grid">\n{icons_html}\n</div>',
+        html_content,
+        flags=re.DOTALL
     )
 
     # Salva o arquivo atualizado
