@@ -44,3 +44,16 @@ jobs:
         run: python autocreatelogos.py  # Agora executando no diretório correto
         env:
           M3U_FILE: "./canaistvpt/pt.m3u"
+
+      - name: Commit e push das alterações
+        run: |
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "<>"
+            git pull
+            if ! git diff --quiet; then
+                git add .
+                git commit -m "Adicionar novos ícones"
+                git push origin main
+            else
+                echo "Nenhuma mudança detectada. Nada a fazer."
+            fi
