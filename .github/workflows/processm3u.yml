@@ -47,6 +47,7 @@ jobs:
 
       - name: Commit e push das alterações
         run: |
+            rm -r canaistvpt
             git config --local user.name "github-actions[bot]"
             git config --local user.email "<>"
             git pull
