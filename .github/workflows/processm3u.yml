@@ -11,7 +11,7 @@ on:
     inputs:
       reason:
         description: "Motivo para execução manual"
-        required: false
+        required: true
 
 jobs:
   process-m3u:
