@@ -13,8 +13,8 @@ def update_index_html():
     # Caminho do arquivo index.html
     index_file = 'index.html'
 
-    # Lista de ícones na pasta principal
-    icons = [file for file in os.listdir('.') if file.endswith(('.png', '.jpg', '.jpeg', '.svg'))]
+    # Lista de ícones na pasta principal (garante que são únicos)
+    icons = list(set(file for file in os.listdir('.') if file.endswith(('.png', '.jpg', '.jpeg', '.svg'))))
 
     # Gera o HTML dinâmico para os ícones
     icons_html = '\n'.join(generate_icon_html(icon) for icon in icons)
@@ -23,7 +23,7 @@ def update_index_html():
     with open(index_file, 'r', encoding='utf-8') as f:
         html_content = f.read()
 
-    # Substitui toda a div pelo novo conteúdo, usando expressão regular
+    # Substitui a div existente de ícones pela nova, garantindo que a repetição não ocorra
     new_content = re.sub(
         r'<div class="icon-grid" id="icon-grid">.*?</div>',
         f'<div class="icon-grid" id="icon-grid">\n{icons_html}\n</div>',
