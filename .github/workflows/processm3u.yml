@@ -3,53 +3,44 @@ name: Processar M3U
 on:
   push:
     paths:
-      - "pt.m3u"  # Especifica que o workflow só dispara se o arquivo pt.m3u for alterado
+      - "pt.m3u"  # Dispara somente quando o pt.m3u for alterado
     branches:
-      - main  # Opcional: Monitora apenas alterações no branch main
+      - main
 
-  workflow_dispatch:  # Permite disparar manualmente
-    inputs:
-      reason:
-        description: "Motivo para execução manual"
-        required: true
+  workflow_dispatch:  # Permite execução manual
 
 jobs:
   process-m3u:
     runs-on: ubuntu-latest
 
     steps:
-      # Passo 1: Clonar o repositório onde o arquivo M3U está hospedado
+      # Passo 1: Clonar o repositório onde o script está localizado
+      - name: Clonar repositório principal (onde o script Python está)
+        uses: actions/checkout@v3
+
+      # Passo 2: Verificar estrutura do repositório
+      - name: Listar arquivos no repositório
+        run: ls -R
+
+      # Passo 3: Clonar o repositório canaistvpt onde está o pt.m3u
       - name: Clonar repositório M3U
         uses: actions/checkout@v3
         with:
           repository: thomraider12/canaistvpt
           path: canaistvpt
 
-      # Passo 2: Configurar Python
+      # Passo 4: Configurar o ambiente Python
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: "3.9"
 
-      # Passo 3: Instalar dependências
+      # Passo 5: Instalar dependências
       - name: Instalar dependências
         run: pip install requests
 
-      # Passo 4: Executar o script Python
+      # Passo 6: Executar script Python
       - name: Executar script
-        run: python autocreatelogos.py
+        run: python autocreatelogos.py  # Agora executando no diretório correto
         env:
           M3U_FILE: "./canaistvpt/pt.m3u"
-
-      - name: Commit e push das alterações
-        run: |
-            git config --local user.name "github-actions[bot]"
-            git config --local user.email "<>"
-            git pull
-            if ! git diff --quiet; then
-                git add .
-                git commit -m "Adicionar novos ícones"
-                git push origin main
-            else
-                echo "Nenhuma mudança detectada. Nada a fazer."
-            fi
