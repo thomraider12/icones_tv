@@ -23,8 +23,8 @@ def update_index_html():
     with open(index_file, 'r', encoding='utf-8') as f:
         html_content = f.read()
 
-    # Substitui a div existente de ícones pela nova, garantindo que a repetição não ocorra
-    new_content = re.sub(
+    # Substitui o conteúdo da div de ícones, removendo a div antiga
+    html_content = re.sub(
         r'<div class="icon-grid" id="icon-grid">.*?</div>',
         f'<div class="icon-grid" id="icon-grid">\n{icons_html}\n</div>',
         html_content,
@@ -33,7 +33,8 @@ def update_index_html():
 
     # Salva o arquivo atualizado
     with open(index_file, 'w', encoding='utf-8') as f:
-        f.write(new_content)
+        f.write(html_content)
+
     print("index.html atualizado com os ícones encontrados.")
 
 if __name__ == "__main__":
