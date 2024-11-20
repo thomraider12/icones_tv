@@ -1,0 +1,55 @@
+name: Processar M3U
+
+on:
+  push:
+    paths:
+      - "pt.m3u"  # Especifica que o workflow só dispara se o arquivo pt.m3u for alterado
+    branches:
+      - main  # Opcional: Monitora apenas alterações no branch main
+
+  workflow_dispatch:  # Permite disparar manualmente
+    inputs:
+      reason:
+        description: "Motivo para execução manual"
+        required: false
+
+jobs:
+  process-m3u:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Clonar o repositório onde o arquivo M3U está hospedado
+      - name: Clonar repositório M3U
+        uses: actions/checkout@v3
+        with:
+          repository: thomraider12/canaistvpt
+          path: canaistvpt
+
+      # Passo 2: Configurar Python
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      # Passo 3: Instalar dependências
+      - name: Instalar dependências
+        run: pip install requests
+
+      # Passo 4: Executar o script Python
+      - name: Executar script
+        run: python autocreatelogos.py
+        env:
+          M3U_FILE: "./canaistvpt/pt.m3u"
+
+      - name: Commit e push das alterações
+        run: |
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "<>"
+            git pull
+            if ! git diff --quiet; then
+                git add .
+                git commit -m "Adicionar novos ícones"
+                git push origin main
+            else
+                echo "Nenhuma mudança detectada. Nada a fazer."
+            fi
