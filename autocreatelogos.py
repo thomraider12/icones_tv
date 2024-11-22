@@ -47,12 +47,18 @@ if m3u_content:
                 logo_url = match_logo.group(1)
                 channel_name = match_channel.group(1).strip()
                 
+                # Ignora canais com parênteses contendo países
+                if re.search(r".*?", channel_name):
+                    continue
+                
                 # Verifica se o logo não começa com os prefixos válidos
                 if not any(logo_url.startswith(prefix) for prefix in valid_prefixes):
                     print(f"Analisando canal: {channel_name}")
                     
+                    # Processa o nome do canal para ficar em minúsculas e sem espaços
+                    sanitized_channel_name = re.sub(r'\s+', '', channel_name.lower())
+                    
                     # Define o caminho para salvar o logo
-                    sanitized_channel_name = re.sub(r'[^\w\-_]', '_', channel_name)  # Substitui caracteres especiais
                     logo_path = os.path.join(f"{sanitized_channel_name}.png")
                     
                     # Baixa o logo
