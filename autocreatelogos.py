@@ -47,9 +47,8 @@ if m3u_content:
                 logo_url = match_logo.group(1)
                 channel_name = match_channel.group(1).strip()
                 
-                # Ignora canais com parênteses contendo países
-                if re.search(r".*?", channel_name):
-                    continue
+                # Remove parênteses e o conteúdo interno do nome do canal
+                channel_name = re.sub(r'\s*.*?\s*', '', channel_name)
                 
                 # Verifica se o logo não começa com os prefixos válidos
                 if not any(logo_url.startswith(prefix) for prefix in valid_prefixes):
