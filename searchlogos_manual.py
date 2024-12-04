@@ -4,7 +4,7 @@ import os
 import requests
 
 # Nome ou URL do arquivo M3U
-arquivo_m3u = "https://github.com/thomraider12/canaistvpt/raw/refs/heads/main/pt.m3u"
+arquivo_m3u = "https://github.com/thomraider12/canaistvpt/raw/refs/heads/main/EPG/testepg.m3u"
 diretorio_logos = "."  # Diretório onde as logos estão armazenadas (diretório atual)
 
 # Função para carregar o conteúdo do arquivo M3U (local ou remoto)
