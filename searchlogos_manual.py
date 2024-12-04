@@ -4,7 +4,7 @@ import os
 import requests
 
 # Nome ou URL do arquivo M3U
-arquivo_m3u = "https://github.com/thomraider12/canaistvpt/raw/refs/heads/main/EPG/testepg.m3u"
+arquivo_m3u = "https://github.com/thomraider12/canaistvpt/raw/main/pt.m3u"
 diretorio_logos = "."  # Diretório onde as logos estão armazenadas (diretório atual)
 
 # Função para carregar o conteúdo do arquivo M3U (local ou remoto)
@@ -19,16 +19,22 @@ def carregar_conteudo_m3u(arquivo):
         with open(arquivo, "r", encoding="utf-8") as f:
             return f.readlines()
 
-# Função para extrair os pares de tvg-name e tvg-logo
-def extrair_tvg_dados(conteudo):
+# Função para extrair os pares de nome de canal e link de logo
+def extrair_canais_dados(conteudo):
     canais = []
     for linha in conteudo:
-        if "tvg-name=" in linha and "tvg-logo=" in linha:
-            # Extrair tvg-name e tvg-logo
-            nome_match = re.search(r'tvg-name="([^"]+)"', linha)
-            logo_match = re.search(r'tvg-logo="([^"]+)"', linha)
-            if nome_match and logo_match:
-                canais.append((nome_match.group(1), logo_match.group(1)))
+        # Imprime as primeiras linhas para verificar o formato
+        print(f"Linha: {linha}")
+        
+        # Verifica se há uma vírgula (indicando a presença do nome do canal)
+        if ',' in linha:
+            partes = linha.split(',')
+            if len(partes) >= 2:
+                nome = partes[1].strip()  # O nome do canal está após a vírgula
+                logo_match = re.search(r'tvg-logo="([^"]+)"', linha)
+                if logo_match:
+                    logo_link = logo_match.group(1)
+                    canais.append((nome, logo_link))
     return canais
 
 # Função para gerar o nome do arquivo da logo a partir do link
@@ -42,7 +48,7 @@ def logo_ja_existe(link):
     nome_logo = gerar_nome_logo(link)
     return os.path.isfile(os.path.join(diretorio_logos, nome_logo))
 
-# Abrir uma aba no navegador para cada tvg-name com pausa para o usuário
+# Abrir uma aba no navegador para cada nome de canal com pausa para o usuário
 def pesquisar_logos_interativo(canais):
     for i, (nome, logo_link) in enumerate(canais, start=1):
         if not logo_ja_existe(logo_link):
@@ -57,13 +63,13 @@ def pesquisar_logos_interativo(canais):
 # Processar o arquivo e abrir as abas
 try:
     conteudo = carregar_conteudo_m3u(arquivo_m3u)
-    canais = extrair_tvg_dados(conteudo)
+    canais = extrair_canais_dados(conteudo)
     if canais:
         print(f"Encontrados {len(canais)} canais com logos. Vamos começar...")
         pesquisar_logos_interativo(canais)
         print("Todas as abas foram abertas.")
     else:
-        print("Nenhum canal com tvg-name e tvg-logo encontrado no arquivo.")
+        print("Nenhum canal com nome e logo encontrado no arquivo.")
 except FileNotFoundError:
     print(f"Arquivo local '{arquivo_m3u}' não encontrado.")
 except requests.RequestException as e:
