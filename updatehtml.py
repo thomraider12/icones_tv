@@ -50,12 +50,12 @@ def generate_new_index_html():
         .icon-grid {
             display: grid;
             gap: 10px;
-            grid-template-columns: repeat(3, 1fr); /* Por padrão, 3 colunas */
+            grid-template-columns: repeat(3, 1fr); 
         }
 
-        @media (min-width: 768px) { /* Para ecrãs maiores (desktop) */
+        @media (min-width: 768px) {
             .icon-grid {
-                grid-template-columns: repeat(6, 1fr); /* 6 colunas no desktop */
+                grid-template-columns: repeat(6, 1fr);
             }
         }
 
