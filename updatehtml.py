@@ -24,7 +24,7 @@ def generate_new_index_html():
     <link rel="icon" type="image/png" href="logo.png">
     <title>Ícones de Televisão e Rádio</title>
     <style>
-        body {{
+        body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -33,26 +33,33 @@ def generate_new_index_html():
             margin: 0;
             background-color: #333; /* Preto-claro */
             color: #ffffff;
-        }}
+        }
 
-        footer {{
+        footer {
             border-radius: 20px;
             color: black;
             background-color: white;
-        }}
+        }
 
-        .container {{
+        .container {
             max-width: 800px;
             margin: auto;
             padding: 20px;
             text-align: center;
-        }}
-        .icon-grid {{
+        }
+        .icon-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 10px;
-        }}
-        .icon-item {{
+            grid-template-columns: repeat(3, 1fr); /* Por padrão, 3 colunas */
+        }
+
+        @media (min-width: 768px) { /* Para ecrãs maiores (desktop) */
+            .icon-grid {
+                grid-template-columns: repeat(6, 1fr); /* 6 colunas no desktop */
+            }
+        }
+
+        .icon-item {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -61,13 +68,13 @@ def generate_new_index_html():
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             overflow: hidden; /* Impede que o texto saia do quadrado */
-        }}
-        .icon-item img {{
+        }
+        .icon-item img {
             max-width: 80px;
             max-height: 80px;
             margin-bottom: 8px;
-        }}
-        .icon-name {{
+        }
+        .icon-name {
             font-size: 0.85em;
             color: #ddd;
             text-align: center;
@@ -76,7 +83,7 @@ def generate_new_index_html():
             text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
             white-space: nowrap; /* Mantém o texto em uma linha */
             width: 100%;
-        }}
+        }
     </style>
 </head>
 <body>
