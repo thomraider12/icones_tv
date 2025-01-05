@@ -31,9 +31,16 @@
         }
         .icon-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 10px;
+            grid-template-columns: repeat(3, 1fr); /* Por padrão, 3 colunas */
         }
+
+        @media (min-width: 768px) { /* Para ecrãs maiores (desktop) */
+            .icon-grid {
+                grid-template-columns: repeat(6, 1fr); /* 6 colunas no desktop */
+            }
+        }
+
         .icon-item {
             display: flex;
             flex-direction: column;
