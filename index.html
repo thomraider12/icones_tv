@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>Ícones de Televisão e Rádio</title>
+    <style>
+        :root {
+            --bg: #2b2b2b;
+            --panel: #3a3a3a;
+            --panel-hover: #454545;
+            --text: #f5f5f5;
+            --text-dim: #c9c9c9;
+            --accent: #5aa9e6;
+            --missing: #e05555;
+            --radius: 10px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 24px 20px 60px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0 0 4px;
+            font-size: 1.6em;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 0.9em;
+            margin: 0 0 20px;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background-color: var(--bg);
+            padding: 10px 0;
+            z-index: 5;
+        }
+
+        #search {
+            width: 100%;
+            max-width: 360px;
+            padding: 10px 14px;
+            font-size: 1em;
+            border-radius: var(--radius);
+            border: 1px solid #555;
+            background-color: var(--panel);
+            color: var(--text);
+        }
+
+        #search:focus,
+        a:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        #status {
+            color: var(--text-dim);
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+
+        .icon-grid {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (min-width: 768px) {
+            .icon-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            border: 1px solid transparent;
+            transition: background-color 0.15s ease;
+        }
+
+        .icon-item:hover {
+            background-color: var(--panel-hover);
+        }
+
+        .icon-item img {
+            max-width: 80px;
+            max-height: 80px;
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .icon-item.missing {
+            border-color: var(--missing);
+        }
+
+        .icon-item.missing img {
+            visibility: hidden;
+        }
+
+        .icon-item.missing .icon-name::before {
+            content: "⚠ em falta — ";
+            color: var(--missing);
+        }
+
+        .icon-name {
+            font-size: 0.8em;
+            color: var(--text-dim);
+            text-align: center;
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        .icon-item.hidden {
+            display: none;
+        }
+
+        .empty-state {
+            color: var(--text-dim);
+            padding: 40px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ícones de Televisão e Rádio</h1>
+        <p class="subtitle">Pesquise por nome para encontrar um canal ou rádio.</p>
+
+        <div class="controls">
+            <input
+                type="search"
+                id="search"
+                placeholder="Pesquisar canal ou rádio…"
+                autocomplete="off"
+                aria-label="Pesquisar ícone por nome"
+            >
+            <span id="status" role="status" aria-live="polite"></span>
+        </div>
+
+        <div class="icon-grid" id="icon-grid"></div>
+        <p class="empty-state" id="empty-state">Nenhum ícone encontrado.</p>
+    </div>
+
+    <script>
+        // Lista de ficheiros de ícones gerada por updatehtml.py — não editar manualmente.
+        const ICONS = ["1plus1.png", "24h-espana.png", "24kitchen.png", "5mincrafts.png", "abolatv.png", "adbtv.png", "afromusicchannel.png", "aljazeera.png", "almalusa.png", "amc.png", "amcbreak.png", "amccrime.png", "anime.png", "antena1.png", "antena1açores.png", "antena1madeira.png", "antena2.png", "antena3.png", "antena3madeira.png", "ard.png", "arirang.png", "arte.png", "artv.png", "aviaçãotv.png", "axn.png", "axnmovies.png", "axnwhite.png", "babytv.png", "batidafm.png", "bbcnews.png", "bfmbusiness.png", "bfmtv.png", "biggs.png", "blast.png", "bloombergtv.png", "bntworld.png", "bomsom.png", "btv.png", "bvn.png", "campopequenotv.png", "canal11.png", "canal11internacional.png", "canal180.png", "canalgaleria.png", "canalhistoria.png", "canalhollywood.png", "canalnos.png", "canalpanda.png", "canalq.png", "cancaonova.png", "cartoonito.png", "cartoonnetwork.png", "caçaepesca.png", "cgtn.png", "cgtndocumentary.png", "cidadefm.png", "cidadehoje.png", "cinekuriakos.png", "cinemundo.png", "clubbingtv.png", "cmradio.png", "cmtv.png", "cnn.png", "cnnpt.png", "comedycentralanimation(us).png", "conectvalgarve.png", "contala.png", "cubavisióninternacional.png", "daserste.png", "dazn1.png", "dazn2.png", "dazn3.png", "dazn4.png", "dazn5.png", "dazn6.png", "deutschewelle.png", "deutschewelledeutsch.png", "discoverychannel.png", "discoveryid.png", "disneychannel.png", "disneyjunior.png", "dizi.png", "EixoDoMal.png", "euronews.png", "eurosport1.png", "eurosport2.png", "failarmy.png", "famaradio.png", "famatv.png", "fashionbox.png", "fastfunbox.png", "fifaplus.png", "fightnetwork.png", "fightsports.png", "filmboxplusfestival.png", "fireplace4k.png", "fogos.png", "formula1channel.png", "foxnews.png", "france24.png", "france24english.png", "france24français.png", "ftv.png", "fueltv.png", "funboxuhd.png", "gametoon.png", "geekdot.png", "GINXeSports.png", "globo.png", "golofm.png", "hiperfm.png", "horsetv.png", "infasttv.png", "insighttv.png", "kanucatv.png", "kbsworld.png", "kidsstars.png", "kuriakoskids.png", "kuriakosmusic.png", "kuriakostv.png", "la1.png", "la2.png", "linear.png", "livemodetv.png", "localvisãotv.png", "logo.png", "lovenature4k.png", "luxetv.png", "m80.png", "maytvinternational.png", "meezolive.png", "megahits.png", "MEOBeachcam.png", "meosudoeste.png", "mezzo.png", "motorsporttv.png", "motorvision.png", "moviesphere.png", "mtmn.png", "mtvportugal.png", "myzentv.png", "natgeowild.png", "nationalgeographic.png", "nationalgeographicwild.png", "newbrasil.png", "nhkworldtv.png", "nickelodeon.png", "nickjr.png", "nosstudios.png", "novaera.png", "nove3cinco.png", "novotempo.png", "now.png", "npcradiotv.png", "observador.png", "odisseia.png", "ondaviva.png", "onetorotv.png", "onfm.png", "orbital.png", "OutroLado.png", "outtv.png", "oxigenio.png", "pandakids.png", "PCNELID.png", "pfc.png", "plutotvdocumentarios.png", "portocanal.png", "radar.png", "radio5.png", "radiocomercial.png", "radiofestival.png", "radiosines.png", "radiosudoeste.png", "radiovozsantotirso.png", "raiitalia.png", "rainews.png", "rakuten.png", "rakutendocumentarios.png", "rakutenfamilia.png", "rakutentopmovies.png", "record.png", "redbulltv.png", "renascença.png", "rfm.png", "rfptv.png", "rtp1.png", "rtp2.png", "rtpafrica.png", "rtpaçores.png", "rtpdesporto1.png", "rtpdesporto2.png", "rtpdesporto3.png", "rtpdesporto4.png", "rtpfado.png", "rtpjazzin.png", "rtplusitania.png", "rtpmadeira.png", "rtpmemoria.png", "rtpmundo.png", "rtpn.png", "rtpopera.png", "rtpvida.png", "rtpzigzag.png", "russiatoday.png", "sic.png", "sicaltadefinicao.png", "siccaras.png", "sick.png", "sicmulher.png", "sicnoticias.png", "sicnovelas.png", "sicradical.png", "SICReplay.png", "skwad.png", "skynews.png", "smoothfm.png", "speedvision.png", "splus.png", "sportingtv.png", "sporttv.png", "sporttv1.png", "sporttv2.png", "sporttv3.png", "sporttv4.png", "sporttv5.png", "sporttv6.png", "sporttv7.png", "sporttvafrica.png", "sporttvnba.png", "starchannel.png", "starcomedy.png", "starcrime.png", "starlife.png", "starmovies.png", "starmundo.png", "stingrayclassica.png", "stingraydjazz.png", "stingraynaturescape.png", "stingraytotalhitsportugal.png", "stvnotícias.png", "superfm.png", "syfy.png", "telesur.png", "tomasafonso.png", "topgear.png", "tpanoticias.png", "tracebrasil.png", "tracetoca.png", "traceuk.png", "traceurban.png", "travelxp.png", "trtworld.png", "truckersfm.png", "tsf.png", "tugafm.png", "tv5monde.png", "tvcineaction.png", "tvcineedition.png", "tvcineemotion.png", "tvcinepower.png", "tvcinetop.png", "tvgalicia.png", "tvi.png", "tviafrica.png", "tvificcao.png", "tviinternacional.png", "tvireality.png", "ubisofttv.png", "unifétv.png", "vevo.png", "vintv.png", "vitecazorestv.png", "vmaistvi.png", "w-sport.png", "waytv.png", "zapviva.png"];
+
+        const grid = document.getElementById('icon-grid');
+        const searchInput = document.getElementById('search');
+        const status = document.getElementById('status');
+        const emptyState = document.getElementById('empty-state');
+
+        const sortedIcons = [...ICONS].sort((a, b) =>
+            a.localeCompare(b, 'pt', { sensitivity: 'base' })
+        );
+
+        function render(icons) {
+            const fragment = document.createDocumentFragment();
+            for (const name of icons) {
+                const item = document.createElement('div');
+                item.className = 'icon-item';
+                item.dataset.name = name.toLowerCase();
+
+                const img = document.createElement('img');
+                img.src = name;
+                img.alt = name;
+                img.title = name;
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                img.addEventListener('error', () => {
+                    item.classList.add('missing');
+                }, { once: true });
+
+                const label = document.createElement('div');
+                label.className = 'icon-name';
+                label.textContent = name;
+
+                item.appendChild(img);
+                item.appendChild(label);
+                fragment.appendChild(item);
+            }
+            grid.appendChild(fragment);
+        }
+
+        render(sortedIcons);
+        updateStatus(sortedIcons.length, sortedIcons.length);
+
+        function updateStatus(visible, total) {
+            status.textContent = visible === total
+                ? `${total} ícones`
+                : `${visible} de ${total} ícones`;
+        }
+
+        let debounceTimer;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(filterIcons, 100);
+        });
+
+        function filterIcons() {
+            const query = searchInput.value.trim().toLowerCase();
+            const items = grid.querySelectorAll('.icon-item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const matches = item.dataset.name.includes(query);
+                item.classList.toggle('hidden', !matches);
+                if (matches) visibleCount++;
+            });
+
+            emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            updateStatus(visibleCount, items.length);
+        }
+    </script>
+</body>
+</html>
